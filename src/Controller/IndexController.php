@@ -8,9 +8,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends AbstractController
 {
     /**
-     * @Route("/dashboard", name="app_index")
+     * @Route("/dashboard", name="app_dashboard")
      */
-    public function index()
+    public function dashboard()
     {
         return $this->render('index/index.html.twig', [
             'controller_name' => 'IndexController',
