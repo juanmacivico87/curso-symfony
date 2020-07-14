@@ -6,12 +6,14 @@
         <thead>
             <tr>
                 <th>Name</th>
+                <th>Colour (RGB)</th>
             </tr>
         </thead>
         <tbody>
             {% for category in categories %}
                 <tr>
                     <td>{{ category.name }}</td>
+                    <td>{{ category.colour }}</td>
                 </tr>
             {% endfor %}
         </tbody>

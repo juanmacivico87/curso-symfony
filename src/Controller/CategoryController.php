@@ -44,8 +44,18 @@ class CategoryController extends AbstractController
                 'category' => $category,
             ]);
         }
-        // Set name of the new category
+
+        if (!$categoryColour = $request->request->get('categoryColour', null)) {
+            // Display a error message
+            $this->addFlash( 'danger', 'Please, enter a colour to the new category' );
+            return $this->render('category/new.html.twig', [
+                'category' => $category,
+            ]);
+        }
+
+        // Set fileds of the new category
         $category->setName($categoryName);
+        $category->setColour($categoryColour);
         // Save new category
         $entityManagerInterface->persist($category);
         $entityManagerInterface->flush();
