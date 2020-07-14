@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\BookmarkRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator as AppAssert;
 
 /**
  * @ORM\Entity(repositoryClass=BookmarkRepository::class)
@@ -28,6 +29,7 @@ class Bookmark
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank
      * @Assert\Url
+     * @AppAssert\AccesibleUrl
      */
     private $url;
 
