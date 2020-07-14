@@ -36,7 +36,7 @@ class BookmarkController extends AbstractController
             $entityManager->persist($bookmark);
             $entityManager->flush();
 
-            return $this->redirectToRoute('bookmark_index');
+            return $this->redirectToRoute('app_bookmark_get');
         }
 
         return $this->render('bookmark/new.html.twig', [
@@ -56,7 +56,7 @@ class BookmarkController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('bookmark_index');
+            return $this->redirectToRoute('app_bookmark_get');
         }
 
         return $this->render('bookmark/edit.html.twig', [
@@ -76,6 +76,6 @@ class BookmarkController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('bookmark_index');
+        return $this->redirectToRoute('app_bookmark_get');
     }
 }
