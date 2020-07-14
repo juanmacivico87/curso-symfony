@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Bookmark{% endblock %}
+
+{% block body %}
+    <h1>Edit Bookmark</h1>
+
+    {{ include('bookmark/_form.html.twig', {'button_label': 'Update'}) }}
+
+    <a href="{{ path('app_bookmark_get') }}">back to list</a>
+
+    {{ include('bookmark/_delete_form.html.twig') }}
+{% endblock %}
