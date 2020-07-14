@@ -53,7 +53,7 @@ class CategoryController extends AbstractController
             ]);
         }
 
-        // Set fileds of the new category
+        // Set fields of the new category
         $category->setName($categoryName);
         $category->setColour($categoryColour);
         // Save new category
@@ -78,7 +78,7 @@ class CategoryController extends AbstractController
 
         if (!$categoryName = $request->request->get('categoryName', null)) {
             // Display a error message
-            $this->addFlash( 'danger', 'Please, enter a name to the new category' );
+            $this->addFlash( 'danger', 'Please, enter a name to the category' );
             return $this->render('category/edit.html.twig', [
                 'category' => $category,
             ]);
@@ -86,20 +86,35 @@ class CategoryController extends AbstractController
 
         if (!$categoryColour = $request->request->get('categoryColour', null)) {
             // Display a error message
-            $this->addFlash( 'danger', 'Please, enter a colour to the new category' );
+            $this->addFlash( 'danger', 'Please, enter a colour to the category' );
             return $this->render('category/edit.html.twig', [
                 'category' => $category,
             ]);
         }
 
-        // Set fileds of the new category
+        // Set fields of the category
         $category->setName($categoryName);
         $category->setColour($categoryColour);
-        // Save new category
+        // Save category
         $entityManager->persist($category);
         $entityManager->flush();
         // Display a success message
-        $this->addFlash( 'success', 'The new category has been saved' );
+        $this->addFlash( 'success', 'The category has been updated' );
+        // Redirect to list of categories
+        return $this->redirectToRoute('app_categories_get');
+    }
+
+    /**
+     * @Route("/categories/remove/{id}", name="app_category_remove")
+     */
+    public function removeCategory(Category $category, Request $request)
+    {
+        // Remove category
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($category);
+        $entityManager->flush();
+        // Display a success message
+        $this->addFlash( 'success', 'The category has been removed' );
         // Redirect to list of categories
         return $this->redirectToRoute('app_categories_get');
     }
