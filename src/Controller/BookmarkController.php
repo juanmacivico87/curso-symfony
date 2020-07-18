@@ -66,15 +66,13 @@ class BookmarkController extends AbstractController
     }
 
     /**
-     * @Route("/bookmarks/delete/{id}", name="app_bookmark_delete", methods={"DELETE"})
+     * @Route("/bookmarks/delete/{id}", name="app_bookmark_delete", methods={"GET"})
      */
     public function delete(Request $request, Bookmark $bookmark): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$bookmark->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($bookmark);
-            $entityManager->flush();
-        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($bookmark);
+        $entityManager->flush();
 
         return $this->redirectToRoute('app_bookmark_get');
     }

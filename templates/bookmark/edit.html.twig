@@ -4,10 +4,6 @@
 
 {% block main_container %}
     <h1>Edit Bookmark</h1>
-
+    <a href="{{ path('app_bookmark_get') }}" title="Back to List">Back to List</a>
     {{ include('bookmark/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_bookmark_get') }}">back to list</a>
-
-    {{ include('bookmark/_delete_form.html.twig') }}
 {% endblock %}
