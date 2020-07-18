@@ -13,16 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookmarkController extends AbstractController
 {
     /**
-     * @Route("/bookmarks", name="app_bookmark_get", methods={"GET"})
-     */
-    public function index(BookmarkRepository $bookmarkRepository): Response
-    {
-        return $this->render('bookmark/index.html.twig', [
-            'bookmarks' => $bookmarkRepository->findAll(),
-        ]);
-    }
-
-    /**
      * @Route("/bookmarks/new", name="app_bookmark_new", methods={"GET","POST"})
      */
     public function new(Request $request): Response
@@ -31,18 +21,19 @@ class BookmarkController extends AbstractController
         $form = $this->createForm(BookmarkType::class, $bookmark);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($bookmark);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_bookmark_get');
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            return $this->render('bookmark/new.html.twig', [
+                'bookmark' => $bookmark,
+                'form' => $form->createView(),
+            ]);
         }
 
-        return $this->render('bookmark/new.html.twig', [
-            'bookmark' => $bookmark,
-            'form' => $form->createView(),
-        ]);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($bookmark);
+        $entityManager->flush();
+        $this->addFlash( 'success', 'The new bookmark has been saved' );
+
+        return $this->redirectToRoute('app_dashboard');
     }
 
     /**
@@ -53,16 +44,17 @@ class BookmarkController extends AbstractController
         $form = $this->createForm(BookmarkType::class, $bookmark);
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('app_bookmark_get');
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            return $this->render('bookmark/edit.html.twig', [
+                'bookmark' => $bookmark,
+                'form' => $form->createView(),
+            ]);
         }
 
-        return $this->render('bookmark/edit.html.twig', [
-            'bookmark' => $bookmark,
-            'form' => $form->createView(),
-        ]);
+        $this->getDoctrine()->getManager()->flush();
+        $this->addFlash( 'success', 'The bookmark has been updated' );
+
+        return $this->redirectToRoute('app_dashboard');
     }
 
     /**
@@ -73,7 +65,8 @@ class BookmarkController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->remove($bookmark);
         $entityManager->flush();
+        $this->addFlash( 'success', 'The bookmark has been removed' );
 
-        return $this->redirectToRoute('app_bookmark_get');
+        return $this->redirectToRoute('app_dashboard');
     }
 }
