@@ -19,6 +19,17 @@ class BookmarkRepository extends ServiceEntityRepository
         parent::__construct($registry, Bookmark::class);
     }
 
+    public function findByCategoryName($categoryName)
+    {
+        return $this->createQueryBuilder('b')
+            ->innerJoin('b.category', 'c')
+            ->andWhere('c.name = :name')
+            ->setParameter('name', $categoryName)
+            ->orderBy('c.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Bookmark[] Returns an array of Bookmark objects
     //  */
