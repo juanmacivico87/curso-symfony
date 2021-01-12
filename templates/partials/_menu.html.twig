@@ -9,6 +9,11 @@
 
   <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
     <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link {{ 'app_favourites' == app_route ? 'active' }}" href="{{ path('app_favourites') }}">
+          Favourites
+        </a>
+      </li>
       {% for category in category_repository.findAll %}
         <li class="nav-item">
           <a class="nav-link {{ 'app_dashboard' == app_route and category.name == category_name ? 'active' }}" href="{{ path('app_dashboard', {categoryName:category.name}) }}">

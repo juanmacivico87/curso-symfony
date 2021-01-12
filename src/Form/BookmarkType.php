@@ -15,6 +15,7 @@ class BookmarkType extends AbstractType
             ->add('name')
             ->add('url')
             ->add('category')
+            ->add('isFavourite')
         ;
     }
 

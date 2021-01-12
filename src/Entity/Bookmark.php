@@ -46,6 +46,11 @@ class Bookmark
      */
     private $createdAt;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isFavourite;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +108,18 @@ class Bookmark
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getIsFavourite(): ?bool
+    {
+        return $this->isFavourite;
+    }
+
+    public function setIsFavourite(?bool $isFavourite): self
+    {
+        $this->isFavourite = $isFavourite;
 
         return $this;
     }

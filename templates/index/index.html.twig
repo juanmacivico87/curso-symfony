@@ -24,6 +24,9 @@
               <a href="{{ path('app_bookmark_edit', {id:bookmark.id}) }}" class="btn btn-link mg-3">
                   <span class="oi oi-pencil" title="Edit" aria-hidden="true"></span>
               </a>
+              <a href="javascript:;" class="btn btn-link mg-3 favourite {{ bookmark.isFavourite ? 'active' }}" data-url="{{ path('app_favourites_edit', {id:bookmark.id}) }}">
+                  <span class="oi oi-star" title="Favourite" aria-hidden="true"></span>
+              </a>
               <a href="{{ path('app_bookmark_delete', {id:bookmark.id}) }}" class="btn btn-link mg-3">
                 <span class="oi oi-delete" title="Delete" aria-hidden="true"></span>
               </a>
