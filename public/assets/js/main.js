@@ -1,18 +1,12 @@
 $('.favourite').on('click', function(event) {
     event.preventDefault();
 
-    let url = $(this).data('url');
-
-    $(this).addClass('disabled')
+    let clicked = $(this);
+    let url     = clicked.data('url');
 
     $.post(url)
     .done(function(response) {
         if (false !== response.updated)
-            $(this).toggleClass('active');
-
-        $(this).removeClass('disabled');
-    })
-    .fail(function() {
-        $(this).removeClass('disabled');
+            clicked.toggleClass('active');
     })
 })
