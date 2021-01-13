@@ -1,0 +1,20 @@
+{{
+    form_start(
+        search_form,
+        {
+            attr: {
+                novalidate: 'novalidate',
+                class: 'form-inline',
+            },
+            method: 'POST',
+            action: path('app_search')
+        }
+    )
+}}
+
+{{ form_widget(search_form.searchInput) }}
+{{ form_widget(search_form.searchButton) }}
+
+{{ form_errors(search_form.searchInput) }}
+
+{{ form_end(search_form) }}

@@ -28,9 +28,12 @@
         <span class="oi oi-plus" title="add" aria-hidden="true"></span>
       </a>
     </div>
-    <form class="form-inline">
-        <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" />
-        <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
-      </form>
+    {{
+      render(
+        controller(
+          'App\\Controller\\BookmarkController::search'
+        )
+      )
+    }}
   </div>
 </nav>

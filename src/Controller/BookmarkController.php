@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Bookmark;
 use App\Form\BookmarkType;
+use App\Form\SearchType;
 use App\Repository\BookmarkRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -68,5 +69,32 @@ class BookmarkController extends AbstractController
         $this->addFlash( 'success', 'The bookmark has been removed' );
 
         return $this->redirectToRoute('app_dashboard');
+    }
+
+    /**
+     * @Route("/bookmarks/search", name="app_search")
+     */
+    public function search(BookmarkRepository $bookmarkRepository, Request $request)
+    {
+        $form = $this->createForm(SearchType::class);
+        $form->handleRequest($request);
+
+        $searchString = '';
+
+        if ($form->isSubmitted() && $form->isValid())
+            $searchString = $form->get('searchInput')->getData();
+
+        $bookmarks  = $bookmarkRepository->findByName($searchString);
+
+        if (false === empty($bookmarks) && $form->isSubmitted()) {
+            return $this->render('index/index.html.twig', [
+                'bookmarks'     => $bookmarks,
+                'search_form'   => $form->createView(),
+            ]);
+        }
+
+        return $this->render('partials/_search.html.twig', [
+            'search_form'   => $form->createView(),
+        ]);
     }
 }

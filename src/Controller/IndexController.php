@@ -13,7 +13,7 @@ class IndexController extends AbstractController
     /**
      * @Route("/dashboard/favourites", name="app_favourites")
      */
-    public function favourites(BookmarkRepository $bookmarkRepository)
+    public function getFavourites(BookmarkRepository $bookmarkRepository)
     {
         return $this->render('index/index.html.twig', [
             'bookmarks' => $bookmarkRepository->findBy([

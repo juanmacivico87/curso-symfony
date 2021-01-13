@@ -30,6 +30,15 @@ class BookmarkRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByName($name)
+    {
+        return $this->createQueryBuilder('b')
+            ->andWhere('b.name LIKE :name')
+            ->setParameter('name', "%$name%")
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Bookmark[] Returns an array of Bookmark objects
     //  */
