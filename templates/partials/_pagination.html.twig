@@ -1,0 +1,33 @@
+{% set total_pages = (total_items / items_per_page)|round(0, 'ceil') %}
+{% set args = path_args is defined ? path_args : {} %}
+{% set path_name = path_name is defined ? path_name : app.request.attributes.get('_route') %}
+
+{% if total_pages > 1 %}
+    <nav>
+        <ul class="page navigation">
+            <li class="page-item {{ current_page == 1 ? 'disabled' }}">
+                <a class="page_link" href="{{ path(path_name, { page: current_page - 1 < 1 ? 1 : current_page - 1 }|merge(args)) }}">
+                    <span>Prev</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+
+    {% for index 1..total_pages %}
+        <li class="page-item {{ current_page == index ? 'active' }}">
+            <a class="page_link" href="{{ path(path_name, { page: index }|merge(args)) }}">
+                <span>{{ index }}</span>
+            </a>
+        </li>
+    {% endfor %}
+
+    <nav>
+        <ul class="page navigation">
+            <li class="page-item {{ current_page == total_pages ? 'disabled' }}">
+                <a class="page_link" href="{{ path(path_name, { page: current_page + 1 <= total_pages ? current_page + 1 : current_page }|merge(args)) }}">
+                    <span>Next</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+{% endif %}

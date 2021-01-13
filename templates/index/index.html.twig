@@ -33,6 +33,15 @@
             </div>
           </div>
         </div>
+        <div class="mt-3">
+          {{
+            include('partials/_pagination.html.twig',{
+              'items_per_page': items_per_page,
+              'total_items': bookmarks.count,
+              'current_page': page,
+            })
+          }}
+        </div>
       </div>
     {% else %}
       <p>Booksmarks not found</p>

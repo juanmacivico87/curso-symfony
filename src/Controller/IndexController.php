@@ -10,6 +10,8 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
 {
+    public const ITEMS_PER_PAGE = 1;
+
     /**
      * @Route("/dashboard/favourites", name="app_favourites")
      */
@@ -46,13 +48,13 @@ class IndexController extends AbstractController
     }
     
     /**
-     * @Route("/dashboard/{categoryName}", name="app_dashboard", defaults={"categoryName": ""})
+     * @Route("/dashboard/{categoryName}/{page}", name="app_dashboard", defaults={"categoryName": "", "page": 1}, requirements={"page"=\d+})
      */
-    public function dashboard(string $categoryName, BookmarkRepository $bookmarkRepository)
+    public function dashboard(string $categoryName, int $page, BookmarkRepository $bookmarkRepository)
     {
         if ('' !== $categoryName)
             return $this->render('index/index.html.twig', [
-                'bookmarks' => $bookmarkRepository->findByCategoryName($categoryName),
+                'bookmarks' => $bookmarkRepository->findByCategoryName($categoryName, $page, self::ITEMS_PER_PAGE),
             ]);
 
         return $this->render('index/index.html.twig', [

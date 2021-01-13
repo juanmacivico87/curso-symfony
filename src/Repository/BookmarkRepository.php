@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Bookmark;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -19,24 +20,37 @@ class BookmarkRepository extends ServiceEntityRepository
         parent::__construct($registry, Bookmark::class);
     }
 
-    public function findByCategoryName($categoryName)
+    public function findByCategoryName($categoryName, $page = 1, $items_per_page = 5)
     {
-        return $this->createQueryBuilder('b')
+        $query = $this->createQueryBuilder('b')
             ->innerJoin('b.category', 'c')
             ->andWhere('c.name = :name')
             ->setParameter('name', $categoryName)
             ->orderBy('c.name', 'ASC')
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
+
+        return $this->pagination($query, $page, $items_per_page);
     }
 
-    public function findByName($name)
+    public function findByName($name, $page = 1, $items_per_page = 5)
     {
-        return $this->createQueryBuilder('b')
+        $query = $this->createQueryBuilder('b')
             ->andWhere('b.name LIKE :name')
             ->setParameter('name', "%$name%")
-            ->getQuery()
-            ->getResult();
+            ->getQuery();
+        
+        return $this->pagination($query, $page, $items_per_page);
+    }
+
+    private function pagination($query, $page, $items_per_page)
+    {
+        $paginator = new Paginator($query);
+
+        $paginator->getQuery()
+            ->setFirstResult($items_per_page * ($page - 1))
+            ->setMaxResults($items_per_page);
+
+        return $paginator;
     }
 
     // /**
