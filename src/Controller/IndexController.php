@@ -13,14 +13,14 @@ class IndexController extends AbstractController
     public const ITEMS_PER_PAGE = 1;
 
     /**
-     * @Route("/dashboard/favourites", name="app_favourites")
+     * @Route("/dashboard/favourites/{page}", name="app_favourites", defaults={"categoryName": "All", "page": 1}, requirements={"page"="\d+"})
      */
-    public function getFavourites(BookmarkRepository $bookmarkRepository)
+    public function getFavourites(int $page, BookmarkRepository $bookmarkRepository)
     {
         return $this->render('index/index.html.twig', [
-            'bookmarks' => $bookmarkRepository->findBy([
-                'isFavourite' => true,
-            ]),
+            'bookmarks'         => $bookmarkRepository->findFavourites($page, self::ITEMS_PER_PAGE),
+            'page'              => $page,
+            'items_per_page'    => self::ITEMS_PER_PAGE,
         ]);
     }
 
@@ -48,17 +48,24 @@ class IndexController extends AbstractController
     }
     
     /**
-     * @Route("/dashboard/{categoryName}/{page}", name="app_dashboard", defaults={"categoryName": "", "page": 1}, requirements={"page"=\d+})
+     * @Route("/dashboard/{categoryName}/{page}", name="app_dashboard", defaults={"categoryName": "All", "page": 1}, requirements={"page"="\d+"})
      */
     public function dashboard(string $categoryName, int $page, BookmarkRepository $bookmarkRepository)
     {
-        if ('' !== $categoryName)
+        if ('All' !== $categoryName) {
             return $this->render('index/index.html.twig', [
-                'bookmarks' => $bookmarkRepository->findByCategoryName($categoryName, $page, self::ITEMS_PER_PAGE),
+                'bookmarks'         => $bookmarkRepository->findByCategoryName($categoryName, $page, self::ITEMS_PER_PAGE),
+                'page'              => $page,
+                'items_per_page'    => self::ITEMS_PER_PAGE,
+                'category'          => $categoryName,
             ]);
+        }
 
         return $this->render('index/index.html.twig', [
-            'bookmarks' => $bookmarkRepository->findAll(),
+            'bookmarks'         => $bookmarkRepository->findAllWithPagination($page, self::ITEMS_PER_PAGE),
+            'page'              => $page,
+            'items_per_page'    => self::ITEMS_PER_PAGE,
+            'category'          => 'All'
         ]);
     }
 }

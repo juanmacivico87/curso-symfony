@@ -20,13 +20,22 @@ class BookmarkRepository extends ServiceEntityRepository
         parent::__construct($registry, Bookmark::class);
     }
 
+    public function findAllWithPagination($page = 1, $items_per_page = 5)
+    {
+        $query = $this->createQueryBuilder('b')
+            ->orderBy('b.createdAt', 'ASC')
+            ->getQuery();
+        
+        return $this->pagination($query, $page, $items_per_page);
+    }
+
     public function findByCategoryName($categoryName, $page = 1, $items_per_page = 5)
     {
         $query = $this->createQueryBuilder('b')
             ->innerJoin('b.category', 'c')
             ->andWhere('c.name = :name')
             ->setParameter('name', $categoryName)
-            ->orderBy('c.name', 'ASC')
+            ->orderBy('b.createdAt', 'ASC')
             ->getQuery();
 
         return $this->pagination($query, $page, $items_per_page);
@@ -37,6 +46,17 @@ class BookmarkRepository extends ServiceEntityRepository
         $query = $this->createQueryBuilder('b')
             ->andWhere('b.name LIKE :name')
             ->setParameter('name', "%$name%")
+            ->orderBy('b.createdAt', 'ASC')
+            ->getQuery();
+        
+        return $page > 0 ? $this->pagination($query, $page, $items_per_page) : $query->getResult();
+    }
+
+    public function findFavourites($page = 1, $items_per_page = 5)
+    {
+        $query = $this->createQueryBuilder('b')
+            ->andWhere('b.isFavourite = true')
+            ->orderBy('b.createdAt', 'ASC')
             ->getQuery();
         
         return $this->pagination($query, $page, $items_per_page);

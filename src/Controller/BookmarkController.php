@@ -84,7 +84,7 @@ class BookmarkController extends AbstractController
         if ($form->isSubmitted() && $form->isValid())
             $searchString = $form->get('searchInput')->getData();
 
-        $bookmarks  = $bookmarkRepository->findByName($searchString);
+        $bookmarks = $bookmarkRepository->findByName($searchString, 0, null);
 
         if (false === empty($bookmarks) && $form->isSubmitted()) {
             return $this->render('index/index.html.twig', [
