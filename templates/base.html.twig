@@ -12,6 +12,8 @@
       <link rel="stylesheet" href="/assets/css/open-iconic-bootstrap.css" />
       <link rel="stylesheet" href="/assets/css/offcanvas.css" />
       <link rel="stylesheet" href="/assets/css/main.css" />
+      {% block component_styles %}
+      {% endblock %}
     {% endblock %}
   </head>
   <body class="bg-light">
@@ -29,6 +31,8 @@
         <script src="/assets/js/bootstrap.min.js"></script>
         <script src="/assets/js/offcanvas.js"></script>
         <script src="/assets/js/main.js"></script>
+        {% block component_scripts %}
+        {% endblock %}
       {% endblock %}
     {% endblock %}
   </body>

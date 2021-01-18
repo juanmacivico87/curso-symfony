@@ -7,3 +7,12 @@
     <a href="{{ path('app_dashboard') }}" title="Back to List">Back to List</a>
     {{ include('bookmark/_form.html.twig', {'button_label': 'Update'}) }}
 {% endblock %}
+
+{% block component_styles %}
+    <link rel="stylesheet" href="/assets/css/select2.min.css" />
+{% endblock %}
+
+{% block component_scripts %}
+    <script src="/assets/js/select2.min.js"></script>
+    <script src="{{ asset('bundles/tetranzselect2entity/js/select2entity.js') }}"></script>
+{% endblock %}

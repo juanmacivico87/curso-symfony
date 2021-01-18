@@ -516,6 +516,9 @@
     "symfony/yaml": {
         "version": "v5.1.1"
     },
+    "tetranz/select2entity-bundle": {
+        "version": "v3.1.0"
+    },
     "twig/extra-bundle": {
         "version": "v3.0.3"
     },

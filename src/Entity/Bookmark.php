@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BookmarkRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use App\Validator as AppAssert;
@@ -50,6 +52,16 @@ class Bookmark
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $isFavourite;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Tag::class, cascade={"persist"})
+     */
+    private $tag;
+
+    public function __construct()
+    {
+        $this->tag = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +132,32 @@ class Bookmark
     public function setIsFavourite(?bool $isFavourite): self
     {
         $this->isFavourite = $isFavourite;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Tag[]
+     */
+    public function getTag(): Collection
+    {
+        return $this->tag;
+    }
+
+    public function addTag(Tag $tag): self
+    {
+        if (!$this->tag->contains($tag)) {
+            $this->tag[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(Tag $tag): self
+    {
+        if ($this->tag->contains($tag)) {
+            $this->tag->removeElement($tag);
+        }
 
         return $this;
     }
