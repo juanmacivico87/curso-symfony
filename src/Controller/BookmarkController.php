@@ -24,8 +24,8 @@ class BookmarkController extends AbstractController
 
         if (!$form->isSubmitted() || !$form->isValid()) {
             return $this->render('bookmark/new.html.twig', [
-                'bookmark' => $bookmark,
-                'form' => $form->createView(),
+                'bookmark'  => $bookmark,
+                'form'      => $form->createView(),
             ]);
         }
 

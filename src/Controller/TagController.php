@@ -13,9 +13,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class TagController extends AbstractController
 {
     /**
-     * @Route("tags/", name="app_tags_get", methods={"GET"})
+     * @Route("tags/", name="app_tags_get")
      */
-    public function getTags(TagRepository $tagRepository): Response
+    public function index(TagRepository $tagRepository): Response
     {
         return $this->render('tag/index.html.twig', [
             'tags' => $tagRepository->findAll(),
@@ -25,7 +25,7 @@ class TagController extends AbstractController
     /**
      * @Route("tags/search", name="app_tags_search")
      */
-    public function searchTags(TagRepository $tagRepository, Request $request): Response
+    public function search(TagRepository $tagRepository, Request $request): Response
     {
         if (false === $request->isXmlHttpRequest())
             throw $this->createNotFoundException();
@@ -39,67 +39,71 @@ class TagController extends AbstractController
     /**
      * @Route("tags/new", name="app_tag_new", methods={"GET","POST"})
      */
-    public function createNewTag(Request $request): Response
+    public function new(Request $request): Response
     {
         $tag = new Tag();
-        $form = $this->createForm(TagType::class, $tag);
-        $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($tag);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_categories_get');
+        if (!$this->isCsrfTokenValid('tag', $request->request->get('tagToken'))) {
+            return $this->render('tag/new.html.twig', [
+                'tag' => $tag,
+            ]);
         }
 
-        return $this->render('tag/new.html.twig', [
-            'tag' => $tag,
-            'form' => $form->createView(),
-        ]);
-    }
+        if (!$tagName = $request->request->get('tagName', null)) {
+            $this->addFlash( 'danger', 'Please, enter a name to the new tag' );
+            return $this->render('tag/new.html.twig', [
+                'tag' => $tag,
+            ]);
+        }
 
-    /**
-     * @Route("tags/{id}", name="app_tag_show", methods={"GET"})
-     */
-    public function showTag(Tag $tag): Response
-    {
-        return $this->render('tag/show.html.twig', [
-            'tag' => $tag,
-        ]);
+        $tag->setName($tagName);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($tag);
+        $entityManager->flush();
+        $this->addFlash( 'success', 'The new tag has been saved' );
+        
+        return $this->redirectToRoute('app_tags_get');
     }
 
     /**
      * @Route("tags/edit/{id}", name="app_tag_edit", methods={"GET","POST"})
      */
-    public function editTag(Request $request, Tag $tag): Response
+    public function edit(Request $request, Tag $tag): Response
     {
-        $form = $this->createForm(TagType::class, $tag);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->getDoctrine()->getManager()->flush();
-
-            return $this->redirectToRoute('app_categories_get');
+        if (!$this->isCsrfTokenValid('tag', $request->request->get('tagToken'))) {
+            return $this->render('tag/edit.html.twig', [
+                'tag' => $tag,
+            ]);
         }
 
-        return $this->render('tag/edit.html.twig', [
-            'tag' => $tag,
-            'form' => $form->createView(),
-        ]);
+        if (!$tagName = $request->request->get('tagName', null)) {
+            $this->addFlash( 'danger', 'Please, enter a name to the tag' );
+            return $this->render('tag/edit.html.twig', [
+                'tag' => $tag,
+            ]);
+        }
+
+        $tag->setName($tagName);
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($tag);
+        $entityManager->flush();
+        $this->addFlash( 'success', 'The tag has been updated' );
+        
+        return $this->redirectToRoute('app_tags_get');
     }
 
     /**
-     * @Route("tags/remove/{id}", name="app_tag_remove", methods={"DELETE"})
+     * @Route("tags/remove/{id}", name="app_tag_remove", methods={"GET"})
      */
-    public function removeTag(Request $request, Tag $tag): Response
+    public function delete(Request $request, Tag $tag): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$tag->getId(), $request->request->get('_token'))) {
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->remove($tag);
-            $entityManager->flush();
-        }
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->remove($tag);
+        $entityManager->flush();
+        $this->addFlash( 'success', 'The tag has been removed' );
 
-        return $this->redirectToRoute('app_categories_get');
+        return $this->redirectToRoute('app_tags_get');
     }
 }

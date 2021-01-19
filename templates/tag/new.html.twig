@@ -2,6 +2,5 @@
 
 {% block main_container %}
     <h1>New tag</h1>
-    {{ include('tag/_form.html.twig') }}
-    <a href="{{ path('app_tags_get') }}">back to list</a>
+    {% include 'tag/_form.html.twig' %}
 {% endblock %}

@@ -1,5 +1,9 @@
 {% include 'partials/_messages.html.twig' %}
-{{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
-{{ form_end(form) }}
+<form method="POST">
+    <div class="form-group">
+        <label for="tagName">Name</label>
+        <input type="text" class="form-control" value="{{ tag.name }}" name="tagName" placeholder="Name" />
+    </div>
+    <input type="hidden" value="{{ csrf_token('tag') }}" name="tagToken" />
+    <button type="submit" class="btn btn-outline-success">Save</button>
+</form>
