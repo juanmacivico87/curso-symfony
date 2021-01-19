@@ -1,4 +1,6 @@
 {{ form_start(form, {'attr': {'novalidate': 'novalidate'}}) }}
     {{ form_widget(form) }}
     <button class="btn btn-outline-success">{{ button_label|default('Save') }}</button>
+    <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="newTagModal">Add new tag</button>
+    {{ include('tag/modal.html.twig') }}
 {{ form_end(form) }}

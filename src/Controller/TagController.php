@@ -67,6 +67,50 @@ class TagController extends AbstractController
     }
 
     /**
+     * @Route("tags/new/ajax", name="app_tag_new_ajax")
+     */
+    public function newFromAjax(Request $request)
+    {
+        if (false === $request->isXmlHttpRequest())
+            throw $this->createNotFoundException();
+
+        $tag    = new Tag();
+        $form   = $this->createForm(TagType::class, $tag, [
+            'action' => $this->generateUrl('app_tag_new_ajax'),
+        ]);
+
+        $form->handleRequest($request);
+
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            return $this->json([
+                'isCreated' => false,
+                'form'      => $this->render('tag/_form.html.twig', [
+                    'ajax'  => true,
+                    'form'  => $form->createView(),
+                ]),
+            ]);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($tag);
+        $entityManager->flush();
+        $this->addFlash('success', 'The new tag has been saved');
+
+        $tag    = new Tag();
+        $form   = $this->createForm(TagType::class, $tag, [
+            'action' => $this->generateUrl('app_tag_new_ajax'),
+        ]);
+
+        return $this->json([
+            'isCreated' => true,
+            'form'      => $this->render('tag/_form.html.twig', [
+                'ajax'  => true,
+                'form'  => $form->createView(),
+            ]),
+        ]);
+    }
+
+    /**
      * @Route("tags/edit/{id}", name="app_tag_edit", methods={"GET","POST"})
      */
     public function edit(Request $request, Tag $tag): Response

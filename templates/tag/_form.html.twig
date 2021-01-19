@@ -1,8 +1,10 @@
-{% include 'partials/_messages.html.twig' %}
-<form method="POST">
+{% if ajax is defined and ajax %}
+    {{ include('partials/_messages.html.twig') }}
+{% endif %}
+<form method="POST" novalidate="novalidate" data-ajax="{{ ajax is defined and ajax ? 'true' : 'false' }}">
     <div class="form-group">
         <label for="tagName">Name</label>
-        <input type="text" class="form-control" value="{{ tag.name }}" name="tagName" placeholder="Name" />
+        <input type="text" class="form-control" value="{{ tag is defined ? tag.name }}" name="tagName" placeholder="Name" />
     </div>
     <input type="hidden" value="{{ csrf_token('tag') }}" name="tagToken" />
     <button type="submit" class="btn btn-outline-success">Save</button>
