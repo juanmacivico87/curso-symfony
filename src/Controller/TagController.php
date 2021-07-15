@@ -75,9 +75,7 @@ class TagController extends AbstractController
             throw $this->createNotFoundException();
 
         $tag    = new Tag();
-        $form   = $this->createForm(TagType::class, $tag, [
-            'action' => $this->generateUrl('app_tag_new_ajax'),
-        ]);
+        $form   = $this->createTagForm($tag);
 
         $form->handleRequest($request);
 
@@ -97,9 +95,7 @@ class TagController extends AbstractController
         $this->addFlash('success', 'The new tag has been saved');
 
         $tag    = new Tag();
-        $form   = $this->createForm(TagType::class, $tag, [
-            'action' => $this->generateUrl('app_tag_new_ajax'),
-        ]);
+        $form   = $this->createTagForm($tag);
 
         return $this->json([
             'isCreated' => true,
@@ -108,6 +104,18 @@ class TagController extends AbstractController
                 'form'  => $form->createView(),
             ]),
         ]);
+    }
+
+    public function createTagForm(Tag $tag = null)
+    {
+        if (null === $tag)
+            $tag = new Tag();
+        
+        $form = $this->createForm(TagType::class, $tag, [
+            'action' => $this->generateUrl('app_tag_new_ajax'),
+        ]);
+
+        return $form;
     }
 
     /**

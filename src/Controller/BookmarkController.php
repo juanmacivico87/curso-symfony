@@ -46,9 +46,12 @@ class BookmarkController extends AbstractController
         $form->handleRequest($request);
 
         if (!$form->isSubmitted() || !$form->isValid()) {
+            $tagController = new TagController();
+
             return $this->render('bookmark/edit.html.twig', [
-                'bookmark' => $bookmark,
-                'form' => $form->createView(),
+                'bookmark'  => $bookmark,
+                'form'      => $form->createView(),
+                'tag_form'  => $tagController->createTagForm(),
             ]);
         }
 
